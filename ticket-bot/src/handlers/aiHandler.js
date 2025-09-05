@@ -435,53 +435,86 @@ class AIHandler {
         }
     }
 
-    // AI Response generation methods - Simple implementation
+    // Enhanced AI Response generation with better context understanding
     async generateAIResponse(prompt, persona = 'friendly') {
-        const baseResponses = {
-            professional: {
-                greetings: ['Selamat datang! Bagaimana saya dapat membantu Anda hari ini?', 'Terima kasih telah menghubungi kami. Ada yang bisa saya bantu?'],
-                questions: ['Pertanyaan yang menarik. Berdasarkan analisis saya, ', 'Mengenai hal tersebut, saya dapat memberikan informasi bahwa '],
-                general: ['Saya akan membantu Anda dengan informasi yang akurat.', 'Berdasarkan data yang tersedia, ']
-            },
-            friendly: {
-                greetings: ['Hai! 😊 Senang bisa ngobrol dengan Anda!', 'Hello! Ada yang bisa saya bantu?', 'Halo! Gimana kabarnya? 😄'],
-                questions: ['Wah, pertanyaan bagus nih! ', 'Oke, soal itu ya... ', 'Hmm, menarik! Menurut saya '],
-                general: ['Iya betul! ', 'Oh gitu ya! ', 'Sip sip! ']
-            },
-            casual: {
-                greetings: ['Yo! Gimana nih?', 'Hei, ada apa bro?', 'Sup! 🤙'],
-                questions: ['Nah itu dia! ', 'Oke bro, gini nih... ', 'Wah, pertanyaan keren tuh! '],
-                general: ['Mantap! ', 'Sip lah! ', 'Oke deh! ']
-            },
-            expert: {
-                greetings: ['Salam! Saya siap memberikan analisis mendalam.', 'Berdasarkan sistem analisis, saya dapat membantu Anda.'],
-                questions: ['Berdasarkan data teknis dan penelitian, ', 'Analisis komprehensif menunjukkan bahwa '],
-                general: ['Secara teknis, hal ini dapat dijelaskan sebagai ', 'Data menunjukkan bahwa ']
+        const lowerPrompt = prompt.toLowerCase();
+        
+        // Greeting responses
+        if (lowerPrompt.includes('hai') || lowerPrompt.includes('hello') || lowerPrompt.includes('halo') || lowerPrompt.includes('hi')) {
+            const greetings = {
+                friendly: ['Hai! 😊 Senang bisa ngobrol dengan Anda! Ada yang bisa saya bantu?', 'Hello! Gimana kabarnya hari ini?', 'Halo! Apa yang ingin kita bahas?'],
+                professional: ['Selamat datang! Bagaimana saya dapat membantu Anda hari ini?', 'Terima kasih telah menghubungi kami. Ada yang bisa saya bantu?'],
+                casual: ['Yo! Gimana nih? Ada yang mau ditanyain?', 'Hei bro! Ada apa?', 'Sup! 🤙 Mau ngobrol apa nih?'],
+                expert: ['Salam! Saya siap memberikan analisis dan informasi yang Anda butuhkan.']
+            };
+            const responses = greetings[persona] || greetings.friendly;
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // Specific topic responses
+        if (lowerPrompt.includes('proxy') || lowerPrompt.includes('mobile proxy')) {
+            return 'Mobile Proxy UA menyediakan layanan proxy berkualitas tinggi! Untuk informasi lengkap dan pemesanan, silakan buka ticket di channel yang tersedia. Kami siap membantu 24/7! 📱✨';
+        }
+        
+        if (lowerPrompt.includes('harga') || lowerPrompt.includes('price') || lowerPrompt.includes('berapa')) {
+            return 'Untuk informasi harga terbaru, Anda bisa:\n• Gunakan command `/dl` untuk cek harga Diamond Lock\n• Buka ticket untuk konsultasi harga proxy\n• Tim kami akan memberikan penawaran terbaik! 💰';
+        }
+        
+        if (lowerPrompt.includes('help') || lowerPrompt.includes('bantuan') || lowerPrompt.includes('gimana')) {
+            return 'Saya siap membantu! 🤖\n\n**Yang bisa saya lakukan:**\n• Chat dan menjawab pertanyaan\n• Bantu dengan informasi proxy\n• Arahkan ke layanan yang tepat\n\nAda yang spesifik ingin ditanyakan?';
+        }
+        
+        if (lowerPrompt.includes('terima kasih') || lowerPrompt.includes('thanks') || lowerPrompt.includes('makasih')) {
+            return 'Sama-sama! 😊 Senang bisa membantu. Jangan ragu untuk bertanya lagi kapan saja ya!';
+        }
+        
+        // Question responses
+        if (lowerPrompt.includes('apa') || lowerPrompt.includes('bagaimana') || lowerPrompt.includes('kenapa') || lowerPrompt.includes('mengapa') || prompt.includes('?')) {
+            const questionStarters = {
+                friendly: ['Wah, pertanyaan bagus nih! 🤔', 'Hmm, menarik! Soal itu ya...', 'Oke, let me explain!'],
+                professional: ['Pertanyaan yang sangat baik. Berdasarkan informasi yang tersedia,', 'Mengenai hal tersebut, saya dapat menjelaskan bahwa'],
+                casual: ['Nah itu dia! Gini lho bro...', 'Wah, pertanyaan keren tuh!', 'Oke bro, gini nih...'],
+                expert: ['Berdasarkan analisis teknis,', 'Secara komprehensif, hal ini dapat dijelaskan sebagai']
+            };
+            const starters = questionStarters[persona] || questionStarters.friendly;
+            const starter = starters[Math.floor(Math.random() * starters.length)];
+            
+            // Try to answer based on keywords
+            if (lowerPrompt.includes('apa itu') || lowerPrompt.includes('what is')) {
+                return starter + ' Untuk penjelasan detail tentang topik tersebut, saya sarankan untuk bertanya lebih spesifik atau membuka ticket untuk konsultasi langsung dengan tim ahli kami!';
             }
+            
+            return starter + ' Bisa tolong diperjelas pertanyaannya? Saya akan berusaha memberikan jawaban yang sesuai! 😊';
+        }
+        
+        // General conversation responses
+        const generalResponses = {
+            friendly: [
+                'Iya betul! Ada yang lain ingin dibahas? 😊',
+                'Oh gitu ya! Menarik banget nih! 🤩', 
+                'Sip sip! Gimana kalau kita bahas topik lain?',
+                'Setuju! Ada pengalaman menarik yang ingin dibagi?'
+            ],
+            professional: [
+                'Terima kasih atas informasinya. Ada hal lain yang bisa saya bantu?',
+                'Saya memahami. Apakah ada pertanyaan lebih lanjut?',
+                'Baik, noted. Silakan sampaikan jika ada yang perlu didiskusikan.'
+            ],
+            casual: [
+                'Mantap bro! 🔥',
+                'Sip lah! Ada cerita lain?',
+                'Oke deh! Gimana lagi nih?',
+                'Cool! 😎 Mau bahas apa lagi?'
+            ],
+            expert: [
+                'Data yang menarik. Perlu analisis lebih mendalam?',
+                'Informasi yang valuable. Ada aspek lain yang ingin dieksplorasi?',
+                'Berdasarkan input tersebut, ada rekomendasi khusus yang dibutuhkan?'
+            ]
         };
-
-        const responses = baseResponses[persona] || baseResponses.friendly;
-        let category = 'general';
         
-        if (prompt.toLowerCase().includes('hai') || prompt.toLowerCase().includes('hello') || prompt.toLowerCase().includes('halo')) {
-            category = 'greetings';
-        } else if (prompt.includes('?') || prompt.toLowerCase().includes('apa') || prompt.toLowerCase().includes('bagaimana')) {
-            category = 'questions';
-        }
-        
-        const responseOptions = responses[category];
-        const randomResponse = responseOptions[Math.floor(Math.random() * responseOptions.length)];
-        
-        // Add context-aware responses
-        if (prompt.toLowerCase().includes('proxy')) {
-            return randomResponse + 'Untuk informasi proxy mobile UA, Anda bisa membuka ticket di channel yang tersedia!';
-        } else if (prompt.toLowerCase().includes('harga') || prompt.toLowerCase().includes('price')) {
-            return randomResponse + 'Untuk informasi harga terbaru, gunakan command /dl atau buka ticket untuk konsultasi!';
-        } else if (prompt.toLowerCase().includes('help') || prompt.toLowerCase().includes('bantuan')) {
-            return randomResponse + 'Saya siap membantu! Anda bisa bertanya apapun atau menggunakan fitur AI lainnya di channel yang tersedia.';
-        }
-        
-        return randomResponse + 'Apakah ada hal lain yang ingin Anda tanyakan atau diskusikan?';
+        const responses = generalResponses[persona] || generalResponses.friendly;
+        return responses[Math.floor(Math.random() * responses.length)];
     }
 
     async generateSummary(text) {
