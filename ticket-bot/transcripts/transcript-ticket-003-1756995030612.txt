@@ -1,0 +1,22 @@
+=== TRANSCRIPT TICKET ===
+Ticket: Ticket-003
+Channel: ticket-archill19-003
+User: 1292870719549604012
+Dibuat: 4/9/2025, 13.44.13
+Ditutup: 4/9/2025, 14.10.30
+Total Pesan: 7
+
+=== PESAN ===
+
+[4/9/2025, 13.44.13] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 🎫 Ticket-003]
+[4/9/2025, 13.48.31] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 💎 Harga Diamond Lock (DL)]
+[4/9/2025, 13.57.09] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 💎 Harga Diamond Lock (DL)]
+[4/9/2025, 13.58.41] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 💎 Harga Diamond Lock (DL)]
+[4/9/2025, 14.07.31] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 💎 Harga Diamond Lock (DL)]
+[4/9/2025, 14.10.20] Archill Assisten#2450: 1.800 | $0.11
+[4/9/2025, 14.10.30] Archill Assisten#2450: 🔄 Sedang menutup ticket dan membuat transcript...

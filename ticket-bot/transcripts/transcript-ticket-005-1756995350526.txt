@@ -1,0 +1,13 @@
+=== TRANSCRIPT TICKET ===
+Ticket: Ticket-005
+Channel: ticket-archill19-005
+User: 1292870719549604012
+Dibuat: 4/9/2025, 14.13.13
+Ditutup: 4/9/2025, 14.15.50
+Total Pesan: 2
+
+=== PESAN ===
+
+[4/9/2025, 14.13.13] Archill Assisten#2450: [Embed/Attachment]
+  └─ [Embed: 🎫 Ticket-005]
+[4/9/2025, 14.15.49] Archill Assisten#2450: 🔄 Sedang menutup ticket dan membuat transcript...
