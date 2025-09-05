@@ -24,3 +24,6 @@ args = "cd ticket-bot && npm start"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[nix]
+packages = ["unzipNLS"]
