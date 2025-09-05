@@ -4,8 +4,6 @@ const TicketHandler = require('./src/handlers/ticketHandler');
 const CommandHandler = require('./src/handlers/commandHandler');
 const StatusHandler = require('./src/handlers/statusHandler');
 const ModerationHandler = require('./src/handlers/moderationHandler');
-const AIHandler = require('./src/handlers/aiHandler');
-const ChannelManager = require('./src/handlers/channelManager');
 
 // Initialize Discord client
 const client = new Client({
@@ -22,8 +20,6 @@ let ticketHandler;
 let commandHandler;
 let statusHandler;
 let moderationHandler;
-let aiHandler;
-let channelManager;
 
 // Bot ready event
 client.once('ready', async () => {
@@ -34,8 +30,6 @@ client.once('ready', async () => {
     commandHandler = new CommandHandler(client);
     statusHandler = new StatusHandler(client);
     moderationHandler = new ModerationHandler(client);
-    aiHandler = new AIHandler(client);
-    channelManager = new ChannelManager(client);
     
     // Register slash commands
     await commandHandler.registerSlashCommands();
@@ -52,33 +46,14 @@ client.once('ready', async () => {
     
     console.log('✅ Auto moderation system activated!');
     
-    // Setup AI channels for all guilds
-    for (const guild of client.guilds.cache.values()) {
-        try {
-            const channelIds = await channelManager.ensureAIChannelsExist(guild);
-            await channelManager.updateBotConfig(channelIds);
-            console.log(`✅ AI channels setup completed for guild: ${guild.name}`);
-        } catch (error) {
-            console.error(`Error setting up AI channels for ${guild.name}:`, error);
-        }
-    }
-    
-    console.log('🤖 AI system fully activated!');
-    
 });
 
-// Handle message events for auto moderation and AI features
+// Handle message events for auto moderation
 client.on('messageCreate', async (message) => {
     try {
-        // Auto moderation first
         await moderationHandler.moderateMessage(message);
-        
-        // Then AI handling if message wasn't deleted
-        if (!message.deleted) {
-            await aiHandler.handleAIMessage(message);
-        }
     } catch (error) {
-        console.error('Error in message handling:', error);
+        console.error('Error in message moderation:', error);
     }
 });
 
