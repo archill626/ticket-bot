@@ -19,7 +19,7 @@ class ChannelManager {
                 { name: 'notes', type: ChannelType.GuildText, topic: '📝 Notes & Reminder - Simpan catatan & pengingat jadwal' },
                 { name: 'news-feed', type: ChannelType.GuildText, topic: '📰 Content Feed - Berita dan artikel terangkum' },
                 { name: 'server-memory', type: ChannelType.GuildText, topic: '🧠 Custom Memory - AI hafal info server ini' },
-                { name: 'Voice AI', type: ChannelType.GuildVoice, topic: '🎤 Voice AI Chat' }
+                { name: 'Voice-AI', type: ChannelType.GuildVoice, topic: 'Voice AI Chat' }
             ];
 
             const createdChannels = {};
@@ -53,9 +53,12 @@ class ChannelManager {
                             reason: `Auto-created AI channel: ${channelConfig.name}`
                         };
 
-                        // Set parent for text channels only
+                        // Set parent for text channels only, and remove topic for voice channels
                         if (channelConfig.type === ChannelType.GuildText && aiCategory) {
                             createOptions.parent = aiCategory.id;
+                        }
+                        if (channelConfig.type === ChannelType.GuildVoice) {
+                            delete createOptions.topic; // Voice channels don't support topics
                         }
 
                         channel = await guild.channels.create(createOptions);

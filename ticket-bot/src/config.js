@@ -30,5 +30,20 @@ module.exports = {
             DESCRIPTION: '**Harga Terbaru:** {price} World Lock',
             FOOTER: 'Data dari gtid.dev | discord.gg/gtid'
         }
+    },
+    
+    // AI Channels - Auto-generated
+    AI_CHANNELS: {
+        CHAT: '1413443556147859557',
+        SUMMARY: '1413443562099572818',
+        TRANSLATE: '1413443568093364339',
+        WRITING: '1413443573365342229',
+        PERSONA: '1413443578289586227',
+        GAMES: '1413443582987079742',
+        NOTES: '1413443588280549386',
+        NEWS: '1413443593472970752',
+        MEMORY: '1413443598837485569',
+        VOICE: ''
     }
+
 };
