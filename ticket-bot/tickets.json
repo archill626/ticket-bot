@@ -1,14 +1,14 @@
 {
-  "nextTicketNumber": 10,
+  "nextTicketNumber": 9,
   "activeTickets": {
-    "1413435610630324316": {
+    "1413199049296973884": {
       "userId": "1292870719549604012",
-      "ticketNumber": "Ticket-009",
-      "createdAt": "2025-09-05T08:08:30.087Z",
-      "channelName": "ticket-archill19-009"
+      "ticketNumber": "Ticket-008",
+      "createdAt": "2025-09-04T16:28:29.514Z",
+      "channelName": "ticket-archill19-008"
     }
   },
   "userTickets": {
-    "1292870719549604012": "1413435610630324316"
+    "1292870719549604012": "1413199049296973884"
   }
 }

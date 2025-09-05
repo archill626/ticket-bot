@@ -4,7 +4,7 @@ module.exports = {
     TRANSCRIPT_CHANNEL_ID: '1413152706872479794', 
     OWNER_ID: '1292870719549604012',
     TICKET_CATEGORY_ID: '1413151732896235610',
-    PROMOTION_CHANNEL_ID: '1413435610630324316', // Channel for promotion panel
+    PROMOTION_CHANNEL_ID: '', // Channel for promotion panel
     TICKETS_FILE: './tickets.json',
     
     // API endpoints
@@ -31,5 +31,4 @@ module.exports = {
             FOOTER: 'Data dari gtid.dev | discord.gg/gtid'
         }
     }
-
 };

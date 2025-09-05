@@ -1,8 +1,9 @@
 const { REST, Routes } = require('discord.js');
 const DLCommand = require('../commands/dlCommand');
 const PaymentCommand = require('../commands/paymentCommand');
-const AdminCommand = require('../commands/adminCommand');
 const AddCommand = require('../commands/addCommand');
+const RenameCommand = require('../commands/renameCommand.js')
+const AdminCommand = require('../commands/adminCommand');
 const commandStateManager = require('../utils/commandStateManager');
 
 class CommandHandler {
@@ -17,10 +18,11 @@ class CommandHandler {
 
     setupCommands() {
         // Register all commands
+        this.commands.set('adduser',AddCommand);
         this.commands.set('dl', DLCommand);
         this.commands.set('payment', PaymentCommand);
+        this.commands.set('rename',RenameCommand);
         this.commands.set('admin', AdminCommand);
-        this.commands.set('add', AddCommand);
     }
 
     async registerSlashCommands() {

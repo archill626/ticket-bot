@@ -3,7 +3,6 @@ const CONFIG = require('./src/config');
 const TicketHandler = require('./src/handlers/ticketHandler');
 const CommandHandler = require('./src/handlers/commandHandler');
 const StatusHandler = require('./src/handlers/statusHandler');
-const ModerationHandler = require('./src/handlers/moderationHandler');
 
 // Initialize Discord client
 const client = new Client({
@@ -19,7 +18,6 @@ const client = new Client({
 let ticketHandler;
 let commandHandler;
 let statusHandler;
-let moderationHandler;
 
 // Bot ready event
 client.once('ready', async () => {
@@ -29,7 +27,6 @@ client.once('ready', async () => {
     ticketHandler = new TicketHandler(client);
     commandHandler = new CommandHandler(client);
     statusHandler = new StatusHandler(client);
-    moderationHandler = new ModerationHandler(client);
     
     // Register slash commands
     await commandHandler.registerSlashCommands();
@@ -44,16 +41,9 @@ client.once('ready', async () => {
     // Start status updates
     statusHandler.startStatusUpdate();
     
-    console.log('✅ Auto moderation system activated!');
-    
-});
-
-// Handle message events for auto moderation
-client.on('messageCreate', async (message) => {
-    try {
-        await moderationHandler.moderateMessage(message);
-    } catch (error) {
-        console.error('Error in message moderation:', error);
+    // Send promotion panel if configured
+    if (CONFIG.PROMOTION_CHANNEL_ID) {
+        await statusHandler.sendPromotionPanel(CONFIG.PROMOTION_CHANNEL_ID);
     }
 });
 
@@ -68,6 +58,12 @@ client.on('interactionCreate', async (interaction) => {
 
         // Handle button interactions
         if (interaction.isButton()) {
+            // Check if it's a promotion button first
+            if (interaction.customId.startsWith('promo_')) {
+                const handled = await statusHandler.handlePromoButton(interaction);
+                if (handled) return;
+            }
+            
             // Handle regular ticket buttons
             await ticketHandler.handleButtonInteraction(interaction);
             return;
