@@ -435,31 +435,129 @@ class AIHandler {
         }
     }
 
-    // AI Response generation methods (placeholder - would use OpenAI API)
+    // AI Response generation methods - Simple implementation
     async generateAIResponse(prompt, persona = 'friendly') {
-        // Placeholder for actual AI implementation
-        const responses = {
-            professional: `Terima kasih atas pertanyaan Anda. Berdasarkan analisis yang saya lakukan, saya dapat memberikan informasi berikut: [Response would be generated here with OpenAI API]`,
-            friendly: `Hai! Senang bisa ngobrol dengan Anda! 😊 [Response would be generated here with OpenAI API]`,
-            casual: `Yo! Gimana nih? [Response would be generated here with OpenAI API]`,
-            expert: `Berdasarkan data teknis dan analisis mendalam, [Response would be generated here with OpenAI API]`
+        const baseResponses = {
+            professional: {
+                greetings: ['Selamat datang! Bagaimana saya dapat membantu Anda hari ini?', 'Terima kasih telah menghubungi kami. Ada yang bisa saya bantu?'],
+                questions: ['Pertanyaan yang menarik. Berdasarkan analisis saya, ', 'Mengenai hal tersebut, saya dapat memberikan informasi bahwa '],
+                general: ['Saya akan membantu Anda dengan informasi yang akurat.', 'Berdasarkan data yang tersedia, ']
+            },
+            friendly: {
+                greetings: ['Hai! 😊 Senang bisa ngobrol dengan Anda!', 'Hello! Ada yang bisa saya bantu?', 'Halo! Gimana kabarnya? 😄'],
+                questions: ['Wah, pertanyaan bagus nih! ', 'Oke, soal itu ya... ', 'Hmm, menarik! Menurut saya '],
+                general: ['Iya betul! ', 'Oh gitu ya! ', 'Sip sip! ']
+            },
+            casual: {
+                greetings: ['Yo! Gimana nih?', 'Hei, ada apa bro?', 'Sup! 🤙'],
+                questions: ['Nah itu dia! ', 'Oke bro, gini nih... ', 'Wah, pertanyaan keren tuh! '],
+                general: ['Mantap! ', 'Sip lah! ', 'Oke deh! ']
+            },
+            expert: {
+                greetings: ['Salam! Saya siap memberikan analisis mendalam.', 'Berdasarkan sistem analisis, saya dapat membantu Anda.'],
+                questions: ['Berdasarkan data teknis dan penelitian, ', 'Analisis komprehensif menunjukkan bahwa '],
+                general: ['Secara teknis, hal ini dapat dijelaskan sebagai ', 'Data menunjukkan bahwa ']
+            }
         };
-        return responses[persona] || responses.friendly;
+
+        const responses = baseResponses[persona] || baseResponses.friendly;
+        let category = 'general';
+        
+        if (prompt.toLowerCase().includes('hai') || prompt.toLowerCase().includes('hello') || prompt.toLowerCase().includes('halo')) {
+            category = 'greetings';
+        } else if (prompt.includes('?') || prompt.toLowerCase().includes('apa') || prompt.toLowerCase().includes('bagaimana')) {
+            category = 'questions';
+        }
+        
+        const responseOptions = responses[category];
+        const randomResponse = responseOptions[Math.floor(Math.random() * responseOptions.length)];
+        
+        // Add context-aware responses
+        if (prompt.toLowerCase().includes('proxy')) {
+            return randomResponse + 'Untuk informasi proxy mobile UA, Anda bisa membuka ticket di channel yang tersedia!';
+        } else if (prompt.toLowerCase().includes('harga') || prompt.toLowerCase().includes('price')) {
+            return randomResponse + 'Untuk informasi harga terbaru, gunakan command /dl atau buka ticket untuk konsultasi!';
+        } else if (prompt.toLowerCase().includes('help') || prompt.toLowerCase().includes('bantuan')) {
+            return randomResponse + 'Saya siap membantu! Anda bisa bertanya apapun atau menggunakan fitur AI lainnya di channel yang tersedia.';
+        }
+        
+        return randomResponse + 'Apakah ada hal lain yang ingin Anda tanyakan atau diskusikan?';
     }
 
     async generateSummary(text) {
-        // Placeholder - would use OpenAI API
-        return `**Ringkasan:**\n${text.substring(0, 200)}...\n\n**Poin Utama:**\n• [Poin 1 dari AI analysis]\n• [Poin 2 dari AI analysis]\n• [Poin 3 dari AI analysis]`;
+        // Simple summarization logic
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+        const wordCount = text.split(' ').length;
+        
+        // Take key sentences (first, middle, last)
+        let keyPoints = [];
+        if (sentences.length >= 3) {
+            keyPoints = [
+                sentences[0].trim(),
+                sentences[Math.floor(sentences.length / 2)].trim(),
+                sentences[sentences.length - 1].trim()
+            ];
+        } else {
+            keyPoints = sentences.map(s => s.trim());
+        }
+        
+        return `**Ringkasan Teks (${wordCount} kata):**\n${text.substring(0, 300)}${text.length > 300 ? '...' : ''}\n\n**Poin Utama:**\n${keyPoints.map((point, i) => `• ${point}`).join('\n')}\n\n*Ringkasan dibuat otomatis oleh AI*`;
     }
 
     async translateText(text, targetLang) {
-        // Placeholder - would use translation API
-        return `[Translated text to ${targetLang}] - (Requires translation API implementation)`;
+        // Simple translation responses (placeholder for actual translation)
+        const translations = {
+            'english': {
+                'halo': 'hello',
+                'selamat pagi': 'good morning',
+                'selamat siang': 'good afternoon', 
+                'selamat malam': 'good evening',
+                'terima kasih': 'thank you',
+                'sampai jumpa': 'goodbye',
+                'apa kabar': 'how are you',
+                'nama saya': 'my name is'
+            },
+            'indonesia': {
+                'hello': 'halo',
+                'good morning': 'selamat pagi',
+                'good afternoon': 'selamat siang',
+                'good evening': 'selamat malam',
+                'thank you': 'terima kasih',
+                'goodbye': 'sampai jumpa',
+                'how are you': 'apa kabar',
+                'my name is': 'nama saya'
+            }
+        };
+        
+        const lowerText = text.toLowerCase();
+        const langDict = translations[targetLang.toLowerCase()];
+        
+        if (langDict) {
+            for (const [key, value] of Object.entries(langDict)) {
+                if (lowerText.includes(key)) {
+                    return text.replace(new RegExp(key, 'gi'), value);
+                }
+            }
+        }
+        
+        return `Terjemahan ke ${targetLang}: "${text}"\n\n*Catatan: Untuk terjemahan yang lebih akurat, fitur ini memerlukan integrasi dengan API terjemahan.*`;
     }
 
     async generateWritingHelp(prompt) {
-        // Placeholder - would use OpenAI API
-        return `**Content yang dihasilkan:**\n\n[AI-generated content based on: "${prompt}"]\n\n**Tips:**\n• Sesuaikan dengan target audience\n• Gunakan call-to-action yang kuat\n• Pertahankan tone yang konsisten`;
+        const lowerPrompt = prompt.toLowerCase();
+        let content = '';
+        
+        if (lowerPrompt.includes('caption') || lowerPrompt.includes('sosial media')) {
+            content = `**Caption Media Sosial:**\n\n✨ "Moment terbaik dimulai dari keputusan berani!"\n\n🔥 Kualitas terbaik, harga terjangkau\n💯 Kepuasan pelanggan prioritas utama\n🚀 Siap membantu impian Anda terwujud!\n\n#QualityFirst #TrustedService #CustomerFirst`;
+        } else if (lowerPrompt.includes('pengumuman') || lowerPrompt.includes('announcement')) {
+            content = `**Pengumuman Resmi:**\n\n📢 PENGUMUMAN PENTING\n\nKepada seluruh member yang terhormat,\n\nDengan ini kami informasikan bahwa [isi pengumuman]. Hal ini bertujuan untuk meningkatkan kualitas layanan kami.\n\nTerima kasih atas perhatian dan kerjasamanya.\n\nSalam,\nManagement Team`;
+        } else if (lowerPrompt.includes('email') || lowerPrompt.includes('formal')) {
+            content = `**Email Formal:**\n\nSubjek: [Topik yang Relevan]\n\nYth. Bapak/Ibu,\n\nMelalui email ini, saya ingin menyampaikan [tujuan email]. Berdasarkan [konteks], kami berharap dapat [tujuan yang ingin dicapai].\n\nApabila ada hal yang perlu didiskusikan lebih lanjut, silakan hubungi kami.\n\nTerima kasih atas perhatiannya.\n\nHormat saya,\n[Nama Anda]`;
+        } else {
+            content = `**Konten yang Disesuaikan:**\n\nBerdasarkan request Anda: "${prompt}"\n\nSaya sarankan untuk memulai dengan outline yang jelas, menggunakan bahasa yang sesuai target audience, dan menambahkan call-to-action yang menarik.\n\nApakah Anda ingin saya bantu dengan aspek tertentu dari penulisan ini?`;
+        }
+        
+        return content + `\n\n**Tips Penulisan:**\n• Gunakan bahasa yang mudah dipahami\n• Tambahkan emosi dan personal touch\n• Sertakan call-to-action yang jelas\n• Periksa tata bahasa dan ejaan`;
     }
 
     // Game methods
